@@ -1,4 +1,5 @@
-function main(){
+// function to send an email that a LOA is starting
+function loa_start(){
   // access the Google Sheet
   let wb = SpreadsheetApp.openByUrl('google-sheet-url');
   
