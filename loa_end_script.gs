@@ -1,4 +1,5 @@
-function main(){
+// function to send an email that a LOA is ending
+function loa_end(){
   // access the Google Sheet
   let wb = SpreadsheetApp.openByUrl('google-sheet-url');
   
