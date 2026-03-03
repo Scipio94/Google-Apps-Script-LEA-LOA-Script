@@ -43,7 +43,7 @@ function loa_end(){
  // for loop to to send emails
   for (let i = 0 ; i < dataObject['First Name'].length;i++ ){
     // returning all LOA starting within range of start_date and end_date
-    if (new Date(dataObject['End Date'][i]) >= start_date && new Date(dataObject['End Date'][i]) <= end_date && dataObject['Location'][i] == 'RHS' ) {
+    if (new Date(dataObject['End Date'][i]) >= start_date && new Date(dataObject['End Date'][i]) <= end_date ) {
 
       // define html variables
       htmlTemplate.firstName = dataObject['First Name'][i];
