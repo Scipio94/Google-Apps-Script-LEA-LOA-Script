@@ -2,10 +2,6 @@
 function loa_start(){
   // access the Google Sheet
   let wb = SpreadsheetApp.openByUrl('google-sheet-url');
-  
-  // creating start and end date variabnles
-  let start_date = new Date('2026-03-01');
-  let end_date = new Date('2026-03-31')
 
   // access the sheet with the data
   let sheet = wb.getSheetByName('sheet_name');
@@ -36,9 +32,13 @@ function loa_start(){
 
  }
 
+// creating dynamic start and end date variabnles
+  let today = new Date();
+  let start_date = new Date(today.getFullYear(),today.getMonth(),1); 
+  let end_date = new Date(today.getFullYear(),today.getMonth() +1 ,0);
+
   // create template object for dynamically constructing html
   let htmlTemplate = HtmlService.createTemplateFromFile('loa_start');
-
 
  // for loop to to send emails
   for (let i = 0 ; i < dataObject['First Name'].length;i++ ){
