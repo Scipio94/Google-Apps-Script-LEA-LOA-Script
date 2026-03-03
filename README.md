@@ -53,11 +53,10 @@ After the data has been extracted into an array, the data is then transformed in
 
 ~~~javascript
 
-// creating start and end date variabnles
-  let start_date = new Date('2026-03-01');
-  let end_date = new Date('2026-03-31')
-
-
+// creating dynamic start and end date variabnles
+  let today = new Date();
+  let start_date = new Date(today.getFullYear(),today.getMonth(),1); 
+  let end_date = new Date(today.getFullYear(),today.getMonth() +1 ,0);
 
 // create template object for dynamically constructing html
   let htmlTemplate = HtmlService.createTemplateFromFile('loa_start');
