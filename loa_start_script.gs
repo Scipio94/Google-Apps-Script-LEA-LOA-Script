@@ -7,7 +7,9 @@ function loa_start(){
   let sheet = wb.getSheetByName('sheet_name');
 
   // creating data array
- let data = sheet.getRange('A2:I62').getDisplayValues();
+  let lastRow = sheet.getLastRow();
+  let lastColumn = sheet.getLastColumn(); 
+  let data = sheet.getRange(1,1,lastRow,lastColumn).getDisplayValues();
 
  // declaring empty array dataArray
  const dataArray = []
@@ -18,7 +20,7 @@ function loa_start(){
 }
 
 
- // creating object
+  // creating object
  const dataObject = {
   'Last Name': dataArray[0],
   'First Name': dataArray[1],
@@ -27,8 +29,8 @@ function loa_start(){
   'Begin Date': dataArray[4],
   'End Date': dataArray[5],
   'Replacement': dataArray[6],
-  'School Contact': dataArray[7],
-  'Mailing List': dataArray[8]
+  'School Registrar Email': dataArray[8],
+  'School CST Secretary Email': dataArray[10]
 
  }
 
@@ -40,11 +42,16 @@ function loa_start(){
   // create template object for dynamically constructing html
   let htmlTemplate = HtmlService.createTemplateFromFile('loa_start');
 
+// creating a list of SPED assignments
+  const sped = ['School Counselor',	'School Counselor/CST',	'School Psychologist',	'Spec Ed ERI',
+ 	'Spec Ed Inclusion',	'Spec Ed Math',	'Spec Ed Resource',	'Spec Ed Resource/Inclusion',
+  	'Behavior Analyst',	'Spec Ed Social Studies',	'Speech Language Specialist']
+
  // for loop to to send emails
   for (let i = 0 ; i < dataObject['First Name'].length;i++ ){
-    // returning all LOA starting within range of start_date and end_date
-    if (new Date(dataObject['Begin Date'][i]) >= start_date && new Date(dataObject['Begin Date'][i]) <= end_date && dataObject['Location'][i] == 'RHS' ) {
-
+    // returning all LOA starting within range of start_date and end_date associated with special programs
+    if ( sped.includes(dataObject['Assignment'][i]) && new Date(dataObject['Begin Date'][i]) >= startDate && new Date(dataObject['Begin Date'][i]) <= endDate ){
+     
       // define html variables
       htmlTemplate.firstName = dataObject['First Name'][i];
       htmlTemplate.lastName = dataObject['Last Name'][i];
@@ -58,10 +65,31 @@ function loa_start(){
     let htmlForEmail = htmlTemplate.evaluate().getContent();
 
     // sending LOA Email
-      GmailApp.sendEmail(dataObject['Mailing List'][i],
+      GmailApp.sendEmail(dataObject['School CST Secretary Email'][i],
       `Leave of Absence Start Alert: ${dataObject['First Name'][i]} ${dataObject['Last Name'][i]}`,
       'This email contains html',{htmlBody: htmlForEmail})
+
+}
+    // returning all LOA starting within range of start_date and end_date not associated with special programs
+    else if (!sped.includes(dataObject['Assignment'][i]) && new Date(dataObject['Begin Date'][i]) >= startDate && new Date(dataObject['Begin Date'][i]) <= endDate) {
+    
+  // define html variables
+      htmlTemplate.firstName = dataObject['First Name'][i];
+      htmlTemplate.lastName = dataObject['Last Name'][i];
+      htmlTemplate.assignment= dataObject['Assignment'][i];
+      htmlTemplate.location = dataObject['Location'][i];
+      htmlTemplate.startDate = dataObject['Begin Date'][i];
+      htmlTemplate.endDate = dataObject['End Date'][i];
+      htmlTemplate.replacement = dataObject['Replacement'][i];
+
+  // evaluates the template and returns htmloutput object
+    let htmlForEmail = htmlTemplate.evaluate().getContent();
+
+    // sending LOA Email
+      GmailApp.sendEmail(dataObject['School Registrar Email'][i],
+      `Leave of Absence Start Alert: ${dataObject['First Name'][i]} ${dataObject['Last Name'][i]}`,
+      'This email contains html',{htmlBody: htmlForEmail})
+
     };
   };
-}
- 
+};
