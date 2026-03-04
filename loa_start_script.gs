@@ -15,7 +15,7 @@ function loa_start(){
  const dataArray = []
 
  // for loop to iterate through nth elements of innerArray and assigning to dataArray
- for (  let i = 0; i <  9; i++ ){
+ for (  let i = 0; i <  11; i++ ){
   dataArray.push(data.map(innerArray => innerArray[i]))
 }
 
